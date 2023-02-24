@@ -40,13 +40,14 @@ let rec tp_of_expr contexte (exp:expr)= match exp with
 let rec tp_cmd contexte = function 
     Skip -> VoidT
     |Exit -> VoidT
-    |Assign (vname,exp) -> VoidT
+    |Assign (vname,exp) -> VoidT (*Vérifier type exp*)
     |Seq (com1,com2) -> let tp1 = tp_cmd contexte com1 and tp2 = tp_cmd contexte com2 in
-                                if tp1 = tp2 then tp1 else failwith "séquence avec types différents"
-    |CondC (exp1, com1, com2) -> let tp1 = tp_cmd contexte com1 and tp2 = tp_cmd contexte com2 in
+                                tp2 
+    |CondC (exp1, com1, com2) -> (* Vérifier exp1 booléen*)
+        let tp1 = tp_cmd contexte com1 and tp2 = tp_cmd contexte com2 in
                                 if tp1 = tp2 then tp1 else failwith "erreur branches de types différents"
     |Loop (com) -> tp_cmd contexte com
-    |CallC (fname,explist) -> VoidT
+    |CallC (fname,explist) -> VoidT(* Vérificaton types arguments, rnevoyer le type de la fonction*)
     |Return (exp) -> tp_of_expr contexte exp
 
 
