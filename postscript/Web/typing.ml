@@ -40,15 +40,15 @@ let rec tp_of_expr contexte (exp:expr)= match exp with
 let rec tp_cmd contexte = function 
     Skip -> VoidT
     |Exit -> VoidT
-    |Assign (vname,exp) ->let t = tp_of_expr exp in  VoidT 
+    |Assign (vname,exp) ->let t = tp_of_expr contexte exp in  VoidT 
     |Seq (com1,com2) -> let tp1 = tp_cmd contexte com1 and tp2 = tp_cmd contexte com2 in
                                 tp2 
-    |CondC (exp1, com1, com2) -> if tp_of_expr exp1 = BoolT then 
+    |CondC (exp1, com1, com2) -> if tp_of_expr contexte exp1 = BoolT then 
         let tp1 = tp_cmd contexte com1 and tp2 = tp_cmd contexte com2 in
                                 if tp1 = tp2 then tp1 else failwith "erreur branches de types différents"
             else failwith "Erreur: une condition doit être un booléen" 
     |Loop (com) -> tp_cmd contexte com
-    |CallC (fname,explist) ->tp_of_expr contexte CallE(fname, explist)
+    |CallC (fname,explist) ->tp_of_expr contexte (CallE(fname, explist))
     |Return (exp) -> tp_of_expr contexte exp
 
 
