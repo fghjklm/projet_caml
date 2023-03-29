@@ -13,13 +13,23 @@ type instr =
 | IDef of fname * instr
 
 let rec string_of_instr instr = match instr with 
-	Ival val -> (match val with
-				BootT b -> Bool.to_string(b)
+	IVal valeur -> (match valeur with
+				BoolV b -> Bool.to_string(b)
 				|FloatV f -> string_of_float(f)
 				|IntV i-> string_of_int (i)
 				|LitV l -> l
-				StringV s -> s)
+				|StringV s -> s)
 	|IVar i -> string_of_int(i)
 	|IOper op -> op
 	|IBloc instr -> string_of_instr instr
 	|ISeq l -> 
+	let rec aux_string_of_inst_ISEQ l = (match l with
+			(a::q) -> (string_of_instr a)^"\n"^(aux_string_of_inst_ISEQ q)
+			|[] -> "") in aux_string_of_inst_ISEQ l
+	|ILoop l -> "{%loop\n"^(string_of_instr l)^"\n}loop"
+	|IDef (name,inst) -> "/"^name^"	{"^(string_of_instr inst)^"} def"
+
+	
+	
+
+
