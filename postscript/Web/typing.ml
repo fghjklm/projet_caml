@@ -48,7 +48,7 @@ let rec tp_cmd contexte = function
                                 if tp1 = tp2 then tp1 else failwith "erreur branches de types différents"
             else failwith "Erreur: une condition doit être un booléen" 
     |Loop (com) -> tp_cmd contexte com
-    |CallC (fname,explist) -> VoidT(* Vérificaton types arguments, rnevoyer le type de la fonction*)
+    |CallC (fname,explist) ->tp_of_expr contexte CallE(fname, explist)
     |Return (exp) -> tp_of_expr contexte exp
 
 
