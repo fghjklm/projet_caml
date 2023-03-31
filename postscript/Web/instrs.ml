@@ -19,7 +19,7 @@ let rec string_of_instr instr = match instr with
 				|IntV i-> string_of_int (i)
 				|LitV l -> l
 				|StringV s -> s)
-	|IVar i -> string_of_int(i)
+	|IVar i -> string_of_int(i)^" index"
 	|IOper op -> op
 	|IBloc instr -> string_of_instr instr
 	|ISeq l -> 
