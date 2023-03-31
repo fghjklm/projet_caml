@@ -31,9 +31,8 @@ let rec tp_of_expr contexte (exp:expr)= match exp with
                                 else failwith "le type d'une condition doit être un booléen"
     |CallE (fname, explist) -> (try 
                             let Fundecl(tp, name, args) = List.find ((function fname -> function Fundecl(tp,name,args) -> name = fname) fname) contexte.funbind 
-                                
                             in
-                            if List.length args = List.length explist && List.for_all2 (function Vardecl(a,tpa) -> function exp -> a = tp_of_expr contexte exp) args explist then tp else failwith "erreur arguments fonction"
+                            if List.length args = List.length explist && List.for_all2 (function Vardecl(tpa,aname) -> function exp -> tpa = tp_of_expr contexte exp) args explist then tp else failwith "erreur arguments fonction"
                         with  Not_found -> failwith "fonction non trouvée")
 
 let rec tp_cmd contexte = function 

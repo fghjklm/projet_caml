@@ -24,9 +24,9 @@ let rec string_of_instr instr = match instr with
 	|IBloc instr -> string_of_instr instr
 	|ISeq l -> 
 	let rec aux_string_of_inst_ISEQ l = (match l with
-			(a::q) -> (string_of_instr a)^"\n"^(aux_string_of_inst_ISEQ q)
+			(a::q) -> (string_of_instr a)^" "^(aux_string_of_inst_ISEQ q)
 			|[] -> "") in aux_string_of_inst_ISEQ l
-	|ILoop l -> "{%loop\n"^(string_of_instr l)^"\n}loop"
+	|ILoop l -> "{"^(string_of_instr l)^"} loop"
 	|IDef (name,inst) -> "/"^name^"	{"^(string_of_instr inst)^"} def"
 
 	
