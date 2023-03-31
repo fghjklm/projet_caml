@@ -21,6 +21,7 @@ type binop =
   BArith of barith
 | BBool of bbool
 | BCompar of bcompar
+
     
 type value =
   BoolV of bool
@@ -33,7 +34,7 @@ type value =
 type expr = 
     Const of value                        (* constant *)
   | VarE of vname                         (* variable *)
-  | BinOp of binop * expr *  expr         (* binary operation *)
+  | BinOp of binop * expr *  expr         (* binary operation *)     
   | CondE of expr * expr * expr           (* conditional expr *)
   | CallE of fname * (expr list)          (* call expression *)
 

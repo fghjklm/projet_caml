@@ -15,7 +15,7 @@
     [("void", VOID_KW);
      ("int", INT_KW);
      ("float", FLOAT_KW);
-     ("String", STRING_KW)
+     ("String", STRING_KW);
      ("return", RETURN_KW);
      ("if", IF_KW);
      ("else", ELSE_KW);
@@ -26,7 +26,7 @@
      ("continue", CONTINUE_KW)]
 
 let find_token s =
-    match List.Assoc.find keyword_tabel s ~equal:String.equal with
+    match (List.assoc_opt s keyword_tabel )  with
     | Some kw -> kw
     | None -> IDENTIFIER s
 }
@@ -36,7 +36,10 @@ let alph =           ['a'-'z''A'-'Z']
 let literal = '/'alph(alph|'-')*
 let comment = '/' '*' '*' '/'
 let digit = ['0'-'9']+
-let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
+let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']
+let boolean_constants = "True"|"False"
+let string_constant = '"' [^'"'] '"'  
+let float_constant = digit+"."(digit+)?
 
 
 rule token = parse
@@ -63,8 +66,8 @@ rule token = parse
 |"=="  { BCEQ }
 | ">=" { BCGE } 
 | ">"  { BCGT }
-| "<=" { BCCLE }
-| "<"  { BCCLT }
+| "<=" { BCLE }
+| "<"  { BCLT }
 | "!=" { BCNE }
 
 | "&&" {BLAND}
@@ -73,14 +76,26 @@ rule token = parse
 
 | "+" { PLUS }
 | "-" { MINUS }
-| "*" { MUL }
-| "/" { TIMES }
+| "*" { TIMES }
+| "/" { DIV }
+
 | "%" { MOD }
+
+(* Diverge de C, à noter dans le README*)
+| "+." { PLUSF }
+| "-." { MINUSF }
+| "*." { TIMESF }
+| "/." { DIVF }
 
 | eof          {EOF}
 | literal as l    { LITCONSTANT l }
+|float_constant as f {FLOATCONSTANT(float_of_string f)}
 | digit+ as i { INTCONSTANT (int_of_string i) }
 | id as id { find_token id }
+|"true" {BOOLCONSTANT true}
+|"false" {BOOLCONSTANT false} 
+|string_constant as s {STRINGCONSTANT(s)}
+
 
 | _  {Printf.printf "ERROR: unrecogized symbol '%s'\n" (Lexing.lexeme lexbuf);
       raise Lexerror }

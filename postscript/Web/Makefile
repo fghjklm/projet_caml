@@ -22,15 +22,11 @@ comp.cmo: comp.ml gen.cmo typing.cmo parser.cmo interf.cmo
 	ocamlc -c $<
 
 
-# ocaml lexer and parser
+lexer.ml: lexer.mll lang.cmo
+	ocamllex $<
 
-# Comment in for your own lexer
-# lexer.ml: lexer.mll lang.cmo
-# 	ocamllex $<
-
-# Comment in for your own parser
-# parser.ml parser.mli: parser.mly lang.cmo
-# 	ocamlyacc $<
+parser.ml parser.mli: parser.mly lang.cmo
+	ocamlyacc $<
 
 lexer.cmo: lexer.ml parser.cmo
 	ocamlc -c $<
