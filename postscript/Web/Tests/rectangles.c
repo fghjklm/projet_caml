@@ -28,12 +28,15 @@ void fig1a(int d, float x, float y, float a) {
     square(x, y, a);
     fig1a(d - 1, x, y, a /. 2.);
   }
+
 }
 
 void fig1b(int d, float x, float y, float a) {
   if (d != 0) {
     square(x, y, a);
     fig1b(d - 1, x +. a, y +. a, a /. 2.);
+  }
+  else{
   }
 }
 

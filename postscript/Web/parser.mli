@@ -21,10 +21,6 @@ type token =
   | RPAREN
   | LBRACE
   | RBRACE
-  | VOID_KW
-  | INT_KW
-  | FLOAT_KW
-  | STRING_KW
   | EQ
   | COMMA
   | SEMICOLON
@@ -48,6 +44,7 @@ type token =
   | BLAND
   | BLOR
   | EOF
+  | FUNDECLDEF
 
 val start :
   (Lexing.lexbuf  -> token) -> Lexing.lexbuf -> Lang.prog

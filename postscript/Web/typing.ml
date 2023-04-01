@@ -33,15 +33,16 @@ let rec tp_of_expr contexte (exp:expr)= match exp with
                             let Fundecl(tp, name, args) = List.find ((function fname -> function Fundecl(tp,name,args) -> name = fname) fname) contexte.funbind 
                             in
                             if List.length args = List.length explist && List.for_all2 (function Vardecl(tpa,aname) -> function exp -> tpa = tp_of_expr contexte exp) args explist then tp else failwith "erreur arguments fonction"
-                        with  Not_found -> failwith "fonction non trouvée")
+                        with  Not_found -> failwith (fname^" : fonction non trouvée"))
 
 let rec tp_cmd contexte = function 
     Skip -> VoidT
     |Exit -> VoidT
-    |Assign (vname,exp) ->let t = tp_of_expr contexte exp in  VoidT 
+    (* Assign ne se contente que de réassigner une valeur à une variable existante, elle ne permet pas d'en créer une*)
+    |Assign (vname,exp) -> let tpe = tp_of_expr contexte exp in (try if tpe = (List.assoc vname contexte.localvars) then tpe else failwith ("Erreur : la variable "^vname^"n'est pas du type voulu") with Not_found -> failwith "Variable non déclarée" ) 
     |Seq (com1,com2) -> if tp_cmd contexte com1= VoidT then tp_cmd contexte com2 else failwith "c1 doit être de type VoidT"
     |CondC (exp1, com1, com2) -> if tp_of_expr contexte exp1 = BoolT then 
-        let tp1 = tp_cmd contexte com1 and tp2 = tp_cmd contexte com2 in
+        let tp1 = tp_cmd contexte com1 and tp2 = (match com2 with Some com -> tp_cmd contexte com | None -> VoidT) in
                                 if tp1 = tp2 then tp1 else failwith "erreur branches de types différents"
             else failwith "Erreur: une condition doit être un booléen" 
     |Loop (com) -> tp_cmd contexte com
@@ -54,7 +55,7 @@ let tp_fundefn contexte (Fundefn(Fundecl (tp,fname,arguments),com))=
     let rec funUniq contexte (Fundecl (tp,fname,arguments))= List.for_all (function Fundecl(_,fname2,_)-> not(fname=fname2)) contexte.funbind
     and
     (*argDiff vérifie que les noms des arguments sont disjoints*)
-    argDiff (args: vardecl list)=
+    argDiff (args)=
             match args with
             (Vardecl(_,vname)::q)-> List.for_all (function Vardecl(_,name2)-> not(vname=name2)) q && argDiff(q)
             | []-> true
@@ -78,5 +79,9 @@ let tp_fundefn contexte (Fundefn(Fundecl (tp,fname,arguments),com))=
     
     
     
-
-let tp_prog (Prog (fundecls, fundefns)) = true
+(* Fonction renvoyant vrai ssi le programme est correctement typé*)
+let tp_prog (Prog (fundecls, fundefns)) = 
+    let rec aux env = function
+        |(Fundefn(Fundecl(tp,fname,ars),com)::l) -> (tp_fundefn env (Fundefn(Fundecl(tp,fname,ars),com)))= tp && aux {localvars = env.localvars; funbind = (Fundecl(tp,fname,ars)::(env.funbind))} l
+        |[] -> true
+    in aux {localvars = []; funbind = fundecls} fundefns

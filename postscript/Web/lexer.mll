@@ -12,10 +12,11 @@
   let advance_line lexbuf =
     lexbuf.lex_curr_p <- advance_line_pos lexbuf.lex_curr_p
   let keyword_tabel =
-    [("void", VOID_KW);
-     ("int", INT_KW);
-     ("float", FLOAT_KW);
-     ("String", STRING_KW);
+    [("void", TP VoidT);
+     ("int", TP IntT);
+     ("float", TP FloatT);
+     ("String", TP StringT);
+     ("bool", TP BoolT);
      ("return", RETURN_KW);
      ("if", IF_KW);
      ("else", ELSE_KW);
@@ -36,8 +37,7 @@ let alph =           ['a'-'z''A'-'Z']
 let literal = '/'alph(alph|'-')*
 let comment = '/' '*' '*' '/'
 let digit = ['0'-'9']+
-let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']
-let boolean_constants = "True"|"False"
+let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 let string_constant = '"' [^'"'] '"'  
 let float_constant = digit+"."(digit+)?
 
@@ -49,8 +49,9 @@ rule token = parse
     {advance_line lexbuf; token lexbuf }    (* white space: recursive call of lexer *)
 | includeline
     { advance_line lexbuf; token lexbuf }    (* C include directives --> ignore *)
-| comment
-    { token lexbuf }    (* comment --> ignore *)
+|"/* Function definition */" {FUNDECLDEF}
+| "/*"
+    { comment lexbuf }    (* comment --> ignore *)
 | '('  { LPAREN }
 | ')'  { RPAREN }
 | '{'  { LBRACE }
@@ -87,16 +88,14 @@ rule token = parse
 | "*." { TIMESF }
 | "/." { DIVF }
 
-| eof          {EOF}
 | literal as l    { LITCONSTANT l }
 |float_constant as f {FLOATCONSTANT(float_of_string f)}
 | digit+ as i { INTCONSTANT (int_of_string i) }
-| id as id { find_token id }
 |"true" {BOOLCONSTANT true}
 |"false" {BOOLCONSTANT false} 
 |string_constant as s {STRINGCONSTANT(s)}
-
-
+| id as id { find_token id }
+|eof {EOF}
 | _  {Printf.printf "ERROR: unrecogized symbol '%s'\n" (Lexing.lexeme lexbuf);
       raise Lexerror }
 
@@ -104,3 +103,9 @@ and
     ruleTail acc = parse
 | eof { acc }
 | _* as str { ruleTail (acc ^ str) lexbuf }
+
+and comment = parse
+| "*/" { token lexbuf }
+| _ { comment lexbuf }
+| eof { failwith "commentaire non termin e"}
+
