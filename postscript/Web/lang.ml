@@ -44,7 +44,7 @@ type com =
   | Exit                                  (* exit from loop *)
   | Assign of vname * expr                (* assign expression to var *)
   | Seq of com * com                      (* sequence of statements *)
-  | CondC of expr * com * com option            (* conditional com *)
+  | CondC of expr * com * com            (* conditional com *)
   | Loop of com                           (* loop until exit *)
   | CallC of fname * (expr list)          (* call statement *)
   | Return of expr                        (* return from call *)

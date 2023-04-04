@@ -42,7 +42,7 @@ let rec tp_cmd contexte = function
     |Assign (vname,exp) -> let tpe = tp_of_expr contexte exp in (try if tpe = (List.assoc vname contexte.localvars) then tpe else failwith ("Erreur : la variable "^vname^"n'est pas du type voulu") with Not_found -> failwith "Variable non déclarée" ) 
     |Seq (com1,com2) -> if tp_cmd contexte com1= VoidT then tp_cmd contexte com2 else failwith "c1 doit être de type VoidT"
     |CondC (exp1, com1, com2) -> if tp_of_expr contexte exp1 = BoolT then 
-        let tp1 = tp_cmd contexte com1 and tp2 = (match com2 with Some com -> tp_cmd contexte com | None -> VoidT) in
+        let tp1 = tp_cmd contexte com1 and tp2 = tp_cmd contexte com2  in
                                 if tp1 = tp2 then tp1 else failwith "erreur branches de types différents"
             else failwith "Erreur: une condition doit être un booléen" 
     |Loop (com) -> tp_cmd contexte com

@@ -86,16 +86,16 @@ block_item:
   |BREAK_KW SEMICOLON{Exit}
   |CONTINUE_KW SEMICOLON{Skip}
   | WHILE_KW LPAREN exp RPAREN LBRACE block_item_list_opt RBRACE
-    {Loop(Seq(CondC($3, Skip, Some Exit),$6))}
+    {Loop(Seq(CondC($3, Skip, Exit),$6))}
   |DO_KW LBRACE block_item_list_opt RBRACE WHILE_KW
     LPAREN exp RPAREN SEMICOLON
-    { Loop(Seq($3, CondC($7, Skip, Some Exit)))}
+    { Loop(Seq($3, CondC($7, Skip, Exit)))}
   |IDENTIFIER EQ exp SEMICOLON {Assign($1,$3)}
   |IDENTIFIER LPAREN args RPAREN SEMICOLON {CallC($1,$3)}
  ;
 if_fstat:
-  | { None }
-  | ELSE_KW LBRACE block_item_list_opt  RBRACE{ Some $3 }
+  | { Skip }
+  | ELSE_KW LBRACE block_item_list_opt  RBRACE{$3 }
 exp:
   |INTCONSTANT
     { Const (IntV $1) }

@@ -545,7 +545,7 @@ let yyact = [|
     let _6 = (Parsing.peek_val __caml_parser_env 1 : Lang.com) in
     Obj.repr(
 # 89 "parser.mly"
-    (Loop(Seq(CondC(_3, Skip, Some Exit),_6)))
+    (Loop(Seq(CondC(_3, Skip, Exit),_6)))
 # 550 "parser.ml"
                : Lang.com))
 ; (fun __caml_parser_env ->
@@ -553,7 +553,7 @@ let yyact = [|
     let _7 = (Parsing.peek_val __caml_parser_env 2 : Lang.expr) in
     Obj.repr(
 # 92 "parser.mly"
-    ( Loop(Seq(_3, CondC(_7, Skip, Some Exit))))
+    ( Loop(Seq(_3, CondC(_7, Skip, Exit))))
 # 558 "parser.ml"
                : Lang.com))
 ; (fun __caml_parser_env ->
@@ -575,14 +575,14 @@ let yyact = [|
 ; (fun __caml_parser_env ->
     Obj.repr(
 # 97 "parser.mly"
-    ( None )
+    ( Skip )
 # 580 "parser.ml"
                : 'if_fstat))
 ; (fun __caml_parser_env ->
     let _3 = (Parsing.peek_val __caml_parser_env 1 : Lang.com) in
     Obj.repr(
 # 98 "parser.mly"
-                                              ( Some _3 )
+                                              (_3 )
 # 587 "parser.ml"
                : 'if_fstat))
 ; (fun __caml_parser_env ->
