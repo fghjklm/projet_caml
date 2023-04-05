@@ -35,7 +35,6 @@ let find_token s =
 let includeline = '#' [^ '\n']* '\n'
 let alph =           ['a'-'z''A'-'Z']
 let literal = '/'alph(alph|'-')*
-let comment = '/' '*' '*' '/'
 let digit = ['0'-'9']+
 let id = ['a'-'z' 'A'-'Z' '_'] ['a'-'z' 'A'-'Z' '0'-'9' '_']*
 let string_constant = '"' [^'"'] '"'  
@@ -93,7 +92,7 @@ rule token = parse
 | digit+ as i { INTCONSTANT (int_of_string i) }
 |"true" {BOOLCONSTANT true}
 |"false" {BOOLCONSTANT false} 
-|string_constant as s {STRINGCONSTANT(s)}
+| '"' [^'"']* '"' { STRINGCONSTANT (Lexing.sub_lexeme lexbuf 1 (lexeme_length lexbuf - 2)) } 
 | id as id { find_token id }
 |eof {EOF}
 | _  {Printf.printf "ERROR: unrecogized symbol '%s'\n" (Lexing.lexeme lexbuf);
