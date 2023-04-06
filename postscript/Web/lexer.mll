@@ -91,7 +91,7 @@ rule token = parse
 | digit+ as i { INTCONSTANT (int_of_string i) }
 |"true" {BOOLCONSTANT true}
 |"false" {BOOLCONSTANT false} 
-| '"' [^'"']* '"' { STRINGCONSTANT (Lexing.sub_lexeme lexbuf 1 (lexeme_length lexbuf - 2)) } 
+| '"' (([^'"'])* as s)  '"' { STRINGCONSTANT s } 
 | id as id { find_token id }
 |eof {EOF}
 | _  {Printf.printf "ERROR: unrecogized symbol '%s'\n" (Lexing.lexeme lexbuf);
