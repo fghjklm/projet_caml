@@ -68,15 +68,6 @@ let tp_fundefn contexte (Fundefn(Fundecl (tp,fname,arguments),com))=
         tp_cmd env com
     else failwith("Certains arguments ont le même nom ou la fonction est déjà définie")
 
-
-
-
-
-
-
-    
-
-    
     
     
 (* Fonction renvoyant vrai ssi le programme est correctement typé*)

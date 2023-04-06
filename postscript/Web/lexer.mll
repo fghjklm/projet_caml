@@ -20,7 +20,6 @@
      ("return", RETURN_KW);
      ("if", IF_KW);
      ("else", ELSE_KW);
-     ("for", FOR_KW);
      ("do", DO_KW);
      ("while", WHILE_KW);
      ("break", BREAK_KW);

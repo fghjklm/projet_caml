@@ -53,7 +53,7 @@ fundecl_list:
 ;
 
 fundefn_list:
-  |/* empty */ {[]}
+  /* empty */ {[]}
   |fundefn fundefn_list {$1 :: $2}
 ;
 fundefn: 
