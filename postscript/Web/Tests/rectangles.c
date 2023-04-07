@@ -36,8 +36,6 @@ void fig1b(int d, float x, float y, float a) {
     square(x, y, a);
     fig1b(d - 1, x +. a, y +. a, a /. 2.);
   }
-  else{
-  }
 }
 
 void main () {

@@ -1,0 +1,26 @@
+%!PS-Adobe-2.0
+/rectangle	{ 
+newpath  3 index 3 index moveto  1 index 0. rlineto  0. 1 index rlineto  0. 2 index sub  0. rlineto  0. 0. 2 index sub  rlineto  closepath  stroke         pop pop pop pop 
+} def
+ /square	{ 
+2 index 2 index 2 index 3 index rectangle  pop pop pop 
+} def
+ /fig1a	{ 
+3 index 0 ne  
+ { 2 index 2 index 2 index square  3 index 1 sub  3 index 3 index 3 index 2. div  fig1a   
+} 
+ {  
+} ifelse  pop pop pop pop 
+} def
+ /fig1b	{ 
+3 index 0 ne  
+ { 2 index 2 index 2 index square  3 index 1 sub  3 index 2 index add  3 index 3 index add  3 index 2. div  fig1b   
+} 
+ {  
+} ifelse  pop pop pop pop 
+} def
+ /main	{ 
+5 200. 450. 100. fig1a  5 100. 200. 100. fig1b   
+} def
+ 
+ main showpage

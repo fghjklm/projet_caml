@@ -38,7 +38,7 @@ let run_test infile outfile =
   then
     (let genprog = Gen.gen_prog inprog in
      let outf = open_out outfile in
-     let instrs = Instrs.string_of_instr genprog in
+     let instrs = "%!PS-Adobe-2.0\n"^(Instrs.string_of_instr genprog )^"\n main showpage"in
      output_string outf instrs;
      close_out outf;
      print_string ("generated " ^ outfile ^ "\n")

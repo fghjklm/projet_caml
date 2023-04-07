@@ -21,15 +21,10 @@ let rec string_of_instr instr = match instr with
 				|StringV s -> s)
 	|IVar i -> string_of_int(i)^" index"
 	|IOper op -> op
-	|IBloc instr -> string_of_instr instr
+	|IBloc instr -> "\n { "^string_of_instr instr ^ " \n}"
 	|ISeq l -> 
 	let rec aux_string_of_inst_ISEQ l = (match l with
 			(a::q) -> (string_of_instr a)^" "^(aux_string_of_inst_ISEQ q)
 			|[] -> "") in aux_string_of_inst_ISEQ l
-	|ILoop l -> "{"^(string_of_instr l)^"} loop"
-	|IDef (name,inst) -> "/"^name^"	{"^(string_of_instr inst)^"} def"
-
-	
-	
-
-
+	|ILoop l -> "{ "^(string_of_instr l)^"\n} loop\n"
+	|IDef (name,inst) -> "/"^name^"	{ \n"^(string_of_instr inst)^"\n} def\n"
