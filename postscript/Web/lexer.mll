@@ -79,6 +79,7 @@ rule token = parse
 | "/" { DIV }
 
 | "%" { MOD }
+
 | "+." { PLUSF }
 | "-." { MINUSF }
 | "*." { TIMESF }

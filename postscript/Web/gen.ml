@@ -12,6 +12,7 @@ let rec lookup_index v = function
    | [] -> failwith ("unable to find variable " ^ v)
    | (vn,t) :: locs -> if v = vn then 0 else 1 + lookup_index v locs
 
+(*  Fonction plaçant les pop en fin de fonction pour ne pas laisser de trace dans la pile*)
 let rec popL = function
   (a::q) -> (IOper "pop")::(popL q)
   |[] -> []
