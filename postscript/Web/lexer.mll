@@ -79,8 +79,6 @@ rule token = parse
 | "/" { DIV }
 
 | "%" { MOD }
-
-(* Diverge de C, à noter dans le README*)
 | "+." { PLUSF }
 | "-." { MINUSF }
 | "*." { TIMESF }
